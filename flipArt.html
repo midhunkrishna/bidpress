@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<title>Draggable (and Resizable) &lt;div&gt; using jQuery - jsFiddle demo</title>
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+	<script type="text/javascript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+
+</head>
+<style>
+	.playground{
+		width: 500px;
+		height: 500px;
+		float: left;
+	}
+	.controls{
+		width: 500px;
+		height: 500px;
+		float: left;
+	}
+	.svg-image{
+		float:left;
+	}
+	.parent {
+		position: relative;
+		width: 200px;
+		height: 21px;
+		background: #000;
+	}
+	.child {
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 190px;
+		height: 20px;
+		outline: 1px solid #ccc;
+		background: #ccc;
+	}
+	</style>
+<script>
+	$(function(){
+		$('.child').resizable({
+			handles: 'n,w,s,e',minWidth: 10,
+			maxWidth: 190
+		});
+		$('.child.scale').resize(function(evt){
+			var toggle;
+			if(window.up){
+				toggle = 10;
+			}else{
+				toggle = -10;
+			}
+
+			var width = parseInt($("svg").find("image").attr("width"));
+			var new_width = width + toggle;
+			var height = parseInt($("svg").find("image").attr("height"));
+			var new_height = height + toggle;
+			console.log(new_width);
+			console.log(new_height);
+
+			$("svg").find("image").attr("width", new_width);
+			$("svg").find("image").attr("height", new_height);
+		});
+		$('.child.rotate').resize(function(evt){
+			console.log($(evt.target).width());
+			var center = {
+				x: parseInt($("svg").find("image").attr("width"))/2,
+				y: parseInt($("svg").find("image").attr("height"))/2
+			}
+			console.log(center);
+			$("svg").find("image").attr("transform", "rotate(" + $(evt.target).width()+ ", "+center.x+", "+ center.y+")");
+		});
+	});
+	function showValue(newValue){
+		document.getElementById("range").innerHTML=newValue;
+	}
+</script>
+<body>
+	<div class="container">
+		<div class="svg-image">
+			<h3>SVG</h3>
+			<div class="playground">
+				<svg width="5000" height="5000">
+					<image x="0" y="20" transform = "rotate(180 , 250, 100)" width="500"  height="200" 
+					xlink:href="http://assets.ubuntu.com/sites/ubuntu/latest/u/img/homepage/1404/image-cloud.svg" />
+					Sorry, your browser does not support inline SVG.
+				</svg>
+			</div>
+			<div class="controls">
+				<h4>scale</h4>
+				<div class="parent">
+					<div class="child scale"></div>
+				</div>
+				<h4>rotation</h4>
+				<div class="parent">
+					<div class="child rotate"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
